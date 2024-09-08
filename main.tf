@@ -8,9 +8,11 @@ resource "digitalocean_droplet" "Caldera" {
   size   = "s-1vcpu-1gb"
   region = "nyc1"
 
-# Create a DigitalOcean Floating IP (Optional)
-resource "digitalocean_floating_ip" "my_floating_ip" {
-  droplet_id = digitalocean_droplet.my_droplet.id
+ tags = ["caldera"]
+
+variable "digitalocean_token" {
+  description = "DigitalOcean API token"
+  type        = string
 }
 
 # Output the Droplet IP address

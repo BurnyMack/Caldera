@@ -1,0 +1,13 @@
+version: '3'
+services:
+  caldera:
+    image: caldera/caldera:latest
+    ports:
+      - "8888:8888"
+    environment:
+      - CALDERA_HOST=0.0.0.0
+    volumes:
+      - caldera_data:/caldera/data
+
+volumes:
+  caldera_data:
