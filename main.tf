@@ -7,7 +7,7 @@ terraform {
   }
 }
 
-# Define variables
+
 variable "do_token" {
   description = "DigitalOcean API token"
   type        = string
@@ -18,24 +18,16 @@ variable "ssh_private_key_path" {
   type        = string
 }
 
-# Define provider configuration
+
 provider "digitalocean" {
   token = var.do_token
 }
 
-# Define SSH key data source
+
 data "digitalocean_ssh_key" "Caldera" {
   name = "Caldera"
 }
 
-# Define project
-resource "digitalocean_project" "Caldera" {
-  name        = "Caldera"
-  description = "Automate Adversary Emulation"
-  purpose     = "CyberSecurity Project"
-}
-
-# Define droplet
 resource "digitalocean_droplet" "Caldera" {
   name   = "Caldera"
   image  = "debian-12-x64"
@@ -46,16 +38,25 @@ resource "digitalocean_droplet" "Caldera" {
   ssh_keys = [data.digitalocean_ssh_key.Caldera.id]
 
   provisioner "remote-exec" {
-    inline = [
-      "apt-get update",
-      "apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release",
-      "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -",
-      "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"",
-      "apt-get update",
-      "apt-get install -y docker-ce docker-ce-cli containerd.io",
-      "git clone https://github.com/mitre/caldera.git --recursive",
-      "cd caldera && docker-compose up -d"
-    ]
+  inline = [
+    "while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do echo 'Waiting for dpkg lock'; sleep 1; done",
+    "sudo apt-get update",
+    "sudo apt-get install -y ca-certificates curl git",
+    "sudo install -m 0755 -d /etc/apt/keyrings",
+    "sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc",
+    "sudo chmod a+r /etc/apt/keyrings/docker.asc",
+    "echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian bookworm stable' | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null",
+    "sudo apt-get update",
+    "sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin",
+    "sudo apt-get install -y git",
+    "sudo apt-get update",
+    "sudo mkdir -p /docker",
+    "cd docker",
+    "git clone https://github.com/mitre/caldera.git --recursive",
+    "cd caldera",
+    "sudo docker build -t caldera:server .",
+    "docker run -p 7010:7010 -p 7011:7011/udp -p 7012:7012 -p 8888:8888 caldera:server"
+  ]
 
     connection {
       type        = "ssh"
@@ -64,4 +65,12 @@ resource "digitalocean_droplet" "Caldera" {
       private_key = file(var.ssh_private_key_path)
     }
   }
+}
+
+resource "digitalocean_project" "Caldera" {
+  name        = "Caldera"
+  description = "Automated Adversary Emulation"
+  purpose     = "CyberSecurity Project"
+  environment = "Production"
+  resources   = [digitalocean_droplet.Caldera.urn]
 }
