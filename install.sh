@@ -46,10 +46,14 @@ python3 -m venv venv
 source venv/bin/activate
 print_msg "Installing Caldera dependencies..."
 pip install -r requirements.txt
+sudo apt update
+sudo apt install nodejs npm -y
+sudo npm install -g @vue/cli
 print_msg "Installing additional plugins..."
 cd plugins
 git clone https://github.com/mitre/stockpile.git
 git clone https://github.com/mitre/atomic.git
+cd /opt/caldera/caldera
 print_msg "Running Caldera..."
 python3 server.py --insecure &
 print_msg "Caldera is installed and running! Access it via http://localhost:8888"
