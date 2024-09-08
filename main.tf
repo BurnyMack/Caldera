@@ -53,8 +53,6 @@ resource "digitalocean_droplet" "Caldera" {
       "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"",
       "apt-get update",
       "apt-get install -y docker-ce docker-ce-cli containerd.io",
-      "systemctl start docker",
-      "systemctl enable docker",
       "git clone https://github.com/mitre/caldera.git --recursive",
       "cd caldera && docker-compose up -d"
     ]
