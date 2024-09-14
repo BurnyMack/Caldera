@@ -7,7 +7,6 @@ terraform {
   }
 }
 
-
 variable "do_token" {
   description = "DigitalOcean API token"
   type        = string
@@ -18,11 +17,9 @@ variable "ssh_private_key_path" {
   type        = string
 }
 
-
 provider "digitalocean" {
   token = var.do_token
 }
-
 
 data "digitalocean_ssh_key" "Caldera" {
   name = "Caldera"
@@ -54,7 +51,7 @@ resource "digitalocean_droplet" "Caldera" {
     "cd docker",
     "git clone https://github.com/mitre/caldera.git --recursive",
     "cd caldera",
-    "sudo docker build -t caldera:server .",
+    "docker build . --build-arg WIN_BUILD=true -t caldera:server",
     "docker run -p 7010:7010 -p 7011:7011/udp -p 7012:7012 -p 8888:8888 caldera:server"
   ]
 
