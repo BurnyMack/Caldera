@@ -21,8 +21,8 @@ provider "digitalocean" {
   token = var.do_token
 }
 
-data "digitalocean_ssh_key" "Caldera" {
-  name = "Caldera"
+data "digitalocean_ssh_key" "SSH_Key" {
+  name = "SSH_Key"
 }
 
 resource "digitalocean_droplet" "Caldera" {
