@@ -32,7 +32,7 @@ resource "digitalocean_droplet" "Caldera" {
   region = "lon1"
   tags   = ["Caldera"]
 
-  ssh_keys = [data.digitalocean_ssh_key.Caldera.id]
+  ssh_keys = [data.digitalocean_ssh_key.SSH_Key.id]
 
   provisioner "remote-exec" {
   inline = [
