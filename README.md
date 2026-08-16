@@ -26,7 +26,7 @@ verify installation with
 
 Clone this repository
 
-```git clone https://github.com/BurnyMack/Caldera.git```
+```git clone https://github.com/BurnyMack/caldera.git```
 
 **Installation**
 
@@ -39,7 +39,7 @@ run install script
 # Terraform Installation(on Linux Debian droplet)
 
 1.Clone this repository
-```git clone https://github.com/BurnyMack/Caldera.git```
+```git clone https://github.com/BurnyMack/caldera.git```
 
 2.Create SSH key pair in SSH Client and Paste public key in DO
 
