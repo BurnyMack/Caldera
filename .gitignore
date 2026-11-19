@@ -181,3 +181,16 @@ terraform.rc
 # Optionally ignore the Terraform lock file
 .terraform.lock.hcl
 .terraform.tfstate.lock.info
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+.fseventsd
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.lnk
+$RECYCLE.BIN/
+System Volume Information/
